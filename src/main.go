@@ -3,21 +3,11 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
-	"os"
+  "os"
+  "github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
+  "github.com/RussianBlue25/go-risc-v-emu/src/cpu"
+  "github.com/RussianBlue25/go-risc-v-emu/src/instruction"
 )
-
-type Instruction struct {
-	opcode int
-	rd     int
-	rs1    int
-	funct3 int
-	imm    int
-}
-
-type Cpu struct {
-	register [32]int
-	cp       int
-}
 
 func main() {
 	//TODO: implement type-aware processing
@@ -30,7 +20,7 @@ func main() {
 
 	//TODO: implement cpu
 	var fetched_binary uint32
-	var inst Instruction
+	var inst instruction.Instruction
 
 	for {
 		errb := binary.Read(file, binary.BigEndian, &fetched_binary)
@@ -41,23 +31,23 @@ func main() {
 		fmt.Printf("%x\n", fetched_binary)
 		inst = interpret_inst(fetched_binary)
 	}
-	cpu := Cpu{}
+	cpu := cpu.Cpu{}
 
-	switch inst.opcode {
+	switch inst.Opcode {
 	case 19:
-		switch inst.funct3 {
+		switch inst.Funct3 {
 		case 0:
-			addi(inst, &cpu)
+			rv32i.Addi(inst, &cpu)
 		case 2:
-      slti(inst, &cpu)
+      rv32i.Slti(inst, &cpu)
     case 7:
-      andi(inst, &cpu)
+      rv32i.Andi(inst, &cpu)
 		}
 	}
-	fmt.Println(cpu.register[inst.rd])
+	fmt.Println(cpu.Register[inst.Rd])
 }
 
-func interpret_inst(fetched_binary uint32) (inst Instruction) {
+func interpret_inst(fetched_binary uint32) (inst instruction.Instruction) {
 	opcode := int(fetched_binary & 0x0000007F)
 	var rd int
 	var funct3 int
@@ -70,21 +60,5 @@ func interpret_inst(fetched_binary uint32) (inst Instruction) {
 		rs1 = int((fetched_binary & 0x000F8000) >> 15)
 		imm = int((fetched_binary & 0xFFF00000) >> 20)
 	}
-	return Instruction{opcode: opcode, rd: rd, rs1: rs1, funct3: funct3, imm: imm}
-}
-
-func addi(inst Instruction, cpu *Cpu) {
-	cpu.register[inst.rd] = cpu.register[inst.rs1] + inst.imm
-}
-
-func slti(inst Instruction, cpu *Cpu) {
-	if cpu.register[inst.rs1] < inst.imm {
-		cpu.register[inst.rd] = 1
-	} else {
-		cpu.register[inst.rd] = 0
-	}
-}
-
-func andi(inst Instruction, cpu *Cpu) {
-  cpu.register[inst.rd] = cpu.register[inst.rs1] & inst.imm
+	return instruction.Instruction{Opcode: opcode, Rd: rd, Rs1: rs1, Funct3: funct3, Imm: imm}
 }
