@@ -21,3 +21,11 @@ func Andi(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Register[inst.Rd] = cpu.Register[inst.Rs1] & inst.Imm
 }
 
+func Ori(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Register[inst.Rd] = cpu.Register[inst.Rs1] | inst.Imm
+}
+
+func Xori(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Register[inst.Rd] = cpu.Register[inst.Rs1] ^ inst.Imm
+}
+

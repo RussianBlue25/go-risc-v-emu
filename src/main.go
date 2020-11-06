@@ -3,10 +3,10 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
-  "os"
-  "github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
-  "github.com/RussianBlue25/go-risc-v-emu/src/cpu"
-  "github.com/RussianBlue25/go-risc-v-emu/src/instruction"
+	"github.com/RussianBlue25/go-risc-v-emu/src/cpu"
+	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
+	"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
+	"os"
 )
 
 func main() {
@@ -23,13 +23,13 @@ func main() {
 	var inst instruction.Instruction
 
 	for {
-		errb := binary.Read(file, binary.BigEndian, &fetched_binary)
+		errb := binary.Read(file, binary.BigEndian, &fetchedBinary)
 		if errb != nil {
 			fmt.Println("can't read binary")
 			break
 		}
-		fmt.Printf("%x\n", fetched_binary)
-		inst = interpretInst(fetched_binary)
+		fmt.Printf("%x\n", fetchedBinary)
+		inst = interpretInst(fetchedBinary)
 	}
 	cpu := cpu.Cpu{}
 
@@ -39,16 +39,20 @@ func main() {
 		case 0:
 			rv32i.Addi(inst, &cpu)
 		case 2:
-      rv32i.Slti(inst, &cpu)
-    case 7:
-      rv32i.Andi(inst, &cpu)
+			rv32i.Slti(inst, &cpu)
+		case 4:
+			rv32i.Xori(inst, &cpu)
+		case 6:
+			rv32i.Ori(inst, &cpu)
+		case 7:
+			rv32i.Andi(inst, &cpu)
 		}
 	}
 	fmt.Println(cpu.Register[inst.Rd])
 }
 
-func interpretInst(fetched_binary uint32) (inst instruction.Instruction) {
-	opcode := int(fetcheBinary & 0x0000007F)
+func interpretInst(fetchedBinary uint32) (inst instruction.Instruction) {
+	opcode := int(fetchedBinary & 0x0000007F)
 	var rd int
 	var funct3 int
 	var rs1 int
