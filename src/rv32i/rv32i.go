@@ -6,26 +6,26 @@ import (
 )
 
 func Addi(inst instruction.Instruction, cpu *cpu.Cpu) {
-	cpu.Register[inst.Rd] = cpu.Register[inst.Rs1] + inst.Imm
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] + inst.Imm
 }
 
 func Slti(inst instruction.Instruction, cpu *cpu.Cpu) {
-	if cpu.Register[inst.Rs1] < inst.Imm {
-		cpu.Register[inst.Rd] = 1
+	if cpu.Registers[inst.Rs1] < inst.Imm {
+		cpu.Registers[inst.Rd] = 1
 	} else {
-		cpu.Register[inst.Rd] = 0
+		cpu.Registers[inst.Rd] = 0
 	}
 }
 
 func Andi(inst instruction.Instruction, cpu *cpu.Cpu) {
-	cpu.Register[inst.Rd] = cpu.Register[inst.Rs1] & inst.Imm
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] & inst.Imm
 }
 
 func Ori(inst instruction.Instruction, cpu *cpu.Cpu) {
-	cpu.Register[inst.Rd] = cpu.Register[inst.Rs1] | inst.Imm
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | inst.Imm
 }
 
 func Xori(inst instruction.Instruction, cpu *cpu.Cpu) {
-	cpu.Register[inst.Rd] = cpu.Register[inst.Rs1] ^ inst.Imm
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] ^ inst.Imm
 }
 
