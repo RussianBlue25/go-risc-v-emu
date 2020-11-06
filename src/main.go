@@ -28,12 +28,16 @@ func main() {
 		panic(errb)
 	}
 
+	var fetchedBinary uint32
 	var Memory [4096]uint8
 
 	copy(Memory[0:], []uint8(binary))
 
 	for {
-		fetchedBinary := uint32(Memory[cpu.Pc])<<24 | uint32(Memory[cpu.Pc+1])<<16 | uint32(Memory[cpu.Pc+2])<<8 | uint32(Memory[cpu.Pc+3])
+		for i := 0; i < 4; i++ {
+			fetchedBinary = fetchedBinary << 8
+			fetchedBinary = fetchedBinary | uint32(Memory[cpu.Pc+uint32(i)])
+		}
 		//TODO: consider memory's last
 		if fetchedBinary == 0x0000 {
 			break
