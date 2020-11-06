@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/binary"
 	"fmt"
 	"github.com/RussianBlue25/go-risc-v-emu/src/cpu"
 	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
 	"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
 	"os"
+	"io/ioutil"
 )
 
 func main() {
@@ -19,19 +19,29 @@ func main() {
 	}
 
 	//TODO: implement cpu
-	var fetchedBinary uint32
 	var inst instruction.Instruction
+	cpu := cpu.Cpu{}
+
+	binary, errb := ioutil.ReadAll(file)
+	if errb != nil {
+		fmt.Println("can't read binary")
+		panic(errb)
+	}
+
+	var Memory [4096]uint8
+
+	copy(Memory[0:], []uint8(binary))
 
 	for {
-		errb := binary.Read(file, binary.BigEndian, &fetchedBinary)
-		if errb != nil {
-			fmt.Println("can't read binary")
+		fetchedBinary := uint32(Memory[cpu.Pc])<<24 | uint32(Memory[cpu.Pc+1])<<16 | uint32(Memory[cpu.Pc+2])<<8 | uint32(Memory[cpu.Pc+3])
+		//TODO: consider memory's last
+		if fetchedBinary == 0x0000 {
 			break
 		}
 		fmt.Printf("%x\n", fetchedBinary)
+		cpu.Pc += 4
 		inst = interpretInst(fetchedBinary)
 	}
-	cpu := cpu.Cpu{}
 
 	switch inst.Opcode {
 	case 19:
