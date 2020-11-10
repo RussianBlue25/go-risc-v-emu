@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/RussianBlue25/go-risc-v-emu/src/cpu"
 	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
-	"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
+	//"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
 	"github.com/RussianBlue25/go-risc-v-emu/src/elf"
 )
 
@@ -22,8 +22,6 @@ func main() {
 
 	var fetchedBinary uint32
 
-	copy(Memory[0:], []uint8(binary))
-
 	for {
 		for i := 0; i < 4; i++ {
 			fetchedBinary = fetchedBinary << 8
@@ -39,21 +37,32 @@ func main() {
 	}
 
 	switch inst.Opcode {
-	case 19:
-		switch inst.Funct3 {
-		case 0:
-			rv32i.Addi(inst, &cpu)
-		case 2:
-			rv32i.Slti(inst, &cpu)
-		case 4:
-			rv32i.Xori(inst, &cpu)
-		case 6:
-			rv32i.Ori(inst, &cpu)
-		case 7:
-			rv32i.Andi(inst, &cpu)
-		}
+		case 19:
+			switch inst.Funct3 {
+				case 0:
+					//rv32i.Addi(inst, &cpu)
+					fmt.Println("addi")
+				case 1:
+					fmt.Println("slli")
+				case 2:
+					//rv32i.Slti(inst, &cpu)
+					fmt.Println("slti")
+				case 4:
+					//rv32i.Xori(inst, &cpu)
+					fmt.Println("xori")
+				case 5:
+					fmt.Println("srli")
+				case 6:
+					//rv32i.Ori(inst, &cpu)
+					fmt.Println("ori")
+				case 7:
+					//rv32i.Andi(inst, &cpu)
+					fmt.Println("andi")
+				default:
+					fmt.Println("unknown")
+			}
 	}
-	fmt.Println(cpu.Register[inst.Rd])
+	fmt.Println(cpu.Registers[inst.Rd])
 }
 
 func interpretInst(fetchedBinary uint32) (inst instruction.Instruction) {
