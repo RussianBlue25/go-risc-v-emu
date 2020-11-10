@@ -29,3 +29,12 @@ func Xori(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] ^ inst.Imm
 }
 
+func Slli(inst instruction.Instruction, cpu *cpu.Cpu) {
+	shift = inst.Imm & 0x01F
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] << shift
+}
+
+func Srli(inst instruction.Instruction, cpu *cpu.Cpu) {
+	shift = inst.Imm & 0x01F
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> shift
+}
