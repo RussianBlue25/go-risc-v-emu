@@ -95,6 +95,8 @@ func ElfLoad(Memory [65536]uint8) [65536]uint8 {
     for i := 0; i < int(elf32Header.E_phnum); i++ {
         start := elf32Pheaders[i].P_vaddr - elf32Header.E_entry
         end := start + elf32Pheaders[i].P_memsz
+        fmt.Println(start)
+        fmt.Println(end)
         copy(Memory[start:end], []uint8(binary2)[elf32Pheaders[i].P_offset:elf32Pheaders[i].P_offset+elf32Pheaders[i].P_filesz])
     }
 

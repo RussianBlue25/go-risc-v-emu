@@ -5,31 +5,22 @@ import (
 	"github.com/RussianBlue25/go-risc-v-emu/src/cpu"
 	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
 	"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
-	"os"
-	"io/ioutil"
+	"github.com/RussianBlue25/go-risc-v-emu/src/elf"
 )
 
 func main() {
+	var Memory [65536]uint8
+
+	Memory = elf.ElfLoad(Memory)
+
 	//TODO: implement type-aware processing
 	// this is I type
-	file, err := os.Open(os.Args[1])
-	if err != nil {
-		fmt.Println("can't open file")
-		panic(err)
-	}
 
 	//TODO: implement cpu
 	var inst instruction.Instruction
 	cpu := cpu.Cpu{}
 
-	binary, errb := ioutil.ReadAll(file)
-	if errb != nil {
-		fmt.Println("can't read binary")
-		panic(errb)
-	}
-
 	var fetchedBinary uint32
-	var Memory [4096]uint8
 
 	copy(Memory[0:], []uint8(binary))
 
