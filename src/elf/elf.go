@@ -76,6 +76,19 @@ func ElfLoad(Memory [65536]uint8) [65536]uint8 {
         }
     }
 
+    checkElfFormat(elf32Header, elf32Pheaders)
+
+    //write to memory
+    for i := 0; i < int(elf32Header.E_phnum); i++ {
+        start := elf32Pheaders[i].P_vaddr - elf32Header.E_entry
+        end := start + elf32Pheaders[i].P_memsz
+        copy(Memory[start:end], []uint8(binary2)[elf32Pheaders[i].P_offset:elf32Pheaders[i].P_offset+elf32Pheaders[i].P_filesz])
+    }
+
+    return Memory
+}
+
+func checkElfFormat(elf32Header elf32Header, elf32Pheaders [128]elf32Pheader) {
     //TODO: add error check
     if elf32Header.E_ident[0] == 0x7f && elf32Header.E_ident[1] == 0x45 && elf32Header.E_ident[2] == 0x4c && elf32Header.E_ident[3] == 0x46 {
         fmt.Println("this is an ELF file")
@@ -90,15 +103,4 @@ func ElfLoad(Memory [65536]uint8) [65536]uint8 {
         fmt.Println("not 32bit")
         os.Exit(1)
     }
-
-    //write to memory
-    for i := 0; i < int(elf32Header.E_phnum); i++ {
-        start := elf32Pheaders[i].P_vaddr - elf32Header.E_entry
-        end := start + elf32Pheaders[i].P_memsz
-        fmt.Println(start)
-        fmt.Println(end)
-        copy(Memory[start:end], []uint8(binary2)[elf32Pheaders[i].P_offset:elf32Pheaders[i].P_offset+elf32Pheaders[i].P_filesz])
-    }
-
-    return Memory
 }
