@@ -150,8 +150,10 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 		switch inst.Funct3 {
 		case 0:
 			if inst.Funct7 == 0 {
+				rv32i.Add(inst, cpu)
 				fmt.Println("add")
 			} else if inst.Funct7 == 32 {
+				rv32i.Sub(inst, cpu)
 				fmt.Println("sub")
 			} else {
 				fmt.Println("unknown")
@@ -159,8 +161,10 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 		case 1:
 			fmt.Println("sll")
 		case 2:
+			rv32i.Slt(inst, cpu)
 			fmt.Println("slt")
 		case 3:
+			rv32i.Sltu(inst, cpu)
 			fmt.Println("sltu")
 		case 4:
 			fmt.Println("xor")
@@ -173,8 +177,10 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 				fmt.Println("unknown")
 			}
 		case 6:
+			rv32i.Or(inst, cpu)
 			fmt.Println("or")
 		case 7:
+			rv32i.And(inst, cpu)
 			fmt.Println("and")
 		default:
 			fmt.Println("unknown")
@@ -200,6 +206,7 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 		rv32i.Jal(inst, cpu)
 		fmt.Println("jal")
 	case 115:
+		rv32i.Jalr(inst, cpu)
 		fmt.Println("jalr")
 	}
 }
