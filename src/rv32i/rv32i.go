@@ -43,8 +43,8 @@ func Srai(inst instruction.Instruction, cpu *cpu.Cpu) {
 	signedBit := inst.Imm & 0x800
 	shift := inst.Imm & 0x01F
 	for i := 0; i < int(shift); i++ {
-		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rd] >> 1
-		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rd] | (signedBit << 7)
+		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> 1
+		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | (signedBit << 7)
 	}
 }
 
