@@ -53,4 +53,9 @@ func Jal(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Pc += inst.Imm
 }
 
+func Jalr(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = cpu.Pc + 4
+	cpu.Pc += (cpu.Registers[inst.Rs1] + inst.Imm) & 0xFFE //12bit
+}
+
 
