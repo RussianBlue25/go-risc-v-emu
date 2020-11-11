@@ -93,7 +93,7 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 		case 51:
 			switch inst.Funct3 {
 				case 0:
-					switch inst.Funct7 == 0 {
+					if inst.Funct7 == 0 {
 						fmt.Println("add")
 					} else if inst.Funct7 == 32 {
 						fmt.Println("sub")
@@ -109,7 +109,7 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 				case 4:
 					fmt.Println("xor")
 				case 5:
-					switch inst.Funct7 == 0 {
+					if inst.Funct7 == 0 {
 						fmt.Println("srl")
 					} else if inst.Funct7 == 32 {
 						fmt.Println("sra")
