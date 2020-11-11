@@ -80,7 +80,14 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 					rv32i.Xori(inst, &cpu)
 					fmt.Println("xori")
 				case 5:
-					fmt.Println("srli")
+					shamt := ((inst.Imm & 0xFC0) >> 4)
+					if shamt == 0 {
+						fmt.Println("srli")
+					} else if shamt == 16 {
+						fmt.Println("srai")
+					} else {
+						fmt.Println("unknown")
+					}
 				case 6:
 					rv32i.Ori(inst, &cpu)
 					fmt.Println("ori")
