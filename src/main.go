@@ -43,7 +43,7 @@ func interpretInst(code uint32) (inst instruction.Instruction) {
 	var rs2 int
 	var imm int
 
-	if opcode == 19 || opcode == 3 { //I format
+	if opcode == 19 || opcode == 3 || opcode == 115 { //I format
 		rd = int((code & 0x00000F80) >> 7)
 		funct3 = int((code & 0x00007000) >> 12)
 		rs1 = int((code & 0x000F8000) >> 15)
@@ -195,5 +195,7 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 		}
 	case 111:
 		fmt.Println("jal")
+	case 115:
+		fmt.Println("jalr")
 	}
 }
