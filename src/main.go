@@ -23,10 +23,7 @@ func main() {
 	var fetchedBinary uint32
 
 	for {
-		for i := 0; i < 4; i++ {
-			fetchedBinary = fetchedBinary << 8
-			fetchedBinary = fetchedBinary | uint32(Memory[cpu.Pc+uint32(i)])
-		}
+		fetchedBinary = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
 		//TODO: consider memory's last
 		if fetchedBinary == 0x0000 {
 			break
@@ -34,6 +31,7 @@ func main() {
 		fmt.Printf("%x\n", fetchedBinary)
 		cpu.Pc += 4
 		inst = interpretInst(fetchedBinary)
+		fmt.Println(inst)
 		execute(inst, cpu)
 	}
 
