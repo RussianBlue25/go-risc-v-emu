@@ -113,3 +113,10 @@ func Sra(inst instruction.Instruction, cpu *cpu.Cpu) {
 	}
 }
 
+func Lui(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = (inst.Imm << 12)
+}
+
+func Auipc(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = cpu.Pc + (inst.Imm << 12)
+}

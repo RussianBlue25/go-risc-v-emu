@@ -136,6 +136,7 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 			fmt.Println("unknown")
 		}
 	case 23:
+		rv32i.Lui(inst, cpu)
 		fmt.Println("lui")
 	case 35:
 		switch inst.Funct3 {
@@ -190,6 +191,7 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 			fmt.Println("unknown")
 		}
 	case 55:
+		rv32i.Auipc(inst, cpu)
 		fmt.Println("auipc")
 	case 99:
 		switch inst.Funct3 {
