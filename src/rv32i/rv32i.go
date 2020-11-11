@@ -42,7 +42,7 @@ func Srli(inst instruction.Instruction, cpu *cpu.Cpu) {
 func Srai(inst instruction.Instruction, cpu *cpu.Cpu) {
 	signedBit := inst.Imm & 0x800
 	shift := inst.Imm & 0x01F
-	for i := 0; i < shift; i++ {
+	for i := 0; i < int(shift); i++ {
 		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rd] >> 1
 		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rd] | (signedBit << 7)
 	}
@@ -94,6 +94,22 @@ func Xor(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] ^ cpu.Registers[inst.Rs2]
 }
 
+func Sll(inst instruction.Instruction, cpu *cpu.Cpu) {
+	shift := cpu.Registers[inst.Rs2] & 0x1F
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] << shift
+}
 
+func Srl(inst instruction.Instruction, cpu *cpu.Cpu) {
+	shift := cpu.Registers[inst.Rs2] & 0x1F
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> shift
+}
 
+func Sra(inst instruction.Instruction, cpu *cpu.Cpu) {
+	signedBit := cpu.Registers[inst.Rs2] & 0x800
+	shift := cpu.Registers[inst.Rs2] & 0x8000
+	for i := 0; i < int(shift); i++ {
+		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> 1
+		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | (signedBit << 7)
+	}
+}
 

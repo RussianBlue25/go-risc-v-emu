@@ -7,5 +7,5 @@ type Instruction struct {
 	Rs2	   int
 	Funct3 int
 	Funct7 int
-	Imm    int
+	Imm    int32
 }

@@ -41,23 +41,23 @@ func decode(code uint32) (inst instruction.Instruction) {
 	var funct7 int
 	var rs1 int
 	var rs2 int
-	var imm int
+	var imm int32
 
 	if opcode == 19 || opcode == 3 || opcode == 115 { //I format
 		rd = int((code & 0x00000F80) >> 7)
 		funct3 = int((code & 0x00007000) >> 12)
 		rs1 = int((code & 0x000F8000) >> 15)
-		imm = int((code & 0xFFF00000) >> 20)
+		imm = int32((code & 0xFFF00000) >> 20)
 	} else if opcode == 23 || opcode == 55 { //U format
 		rd = int((code & 0x00000F80) >> 7)
-		imm = int((code & 0xFFFFF000) >> 12) << 12
+		imm = int32((code & 0xFFFFF000) >> 12) << 12
 	} else if opcode == 35 { //S format
-		imm1 := int((code & 0x00000F80) >> 7)
+		imm1 := (code & 0x00000F80) >> 7
 		funct3 = int((code & 0x00007000) >> 12)
 		rs1 = int((code & 0x000F8000) >> 15)
 		rs2 = int((code & 0x01F00000) >> 20)
-		imm2 := int((code & 0xFE000000) >> 25)
-		imm = (imm2 << 5) | imm1
+		imm2 := (code & 0xFE000000) >> 25
+		imm = int32((imm2 << 5) | imm1)
 	} else if opcode == 51 {//R format
 		rd = int((code & 0x00000F80) >> 7)
 		funct3 = int((code & 0x00007000) >> 12)
@@ -65,21 +65,21 @@ func decode(code uint32) (inst instruction.Instruction) {
 		rs2 = int((code & 0x01F00000) >> 20)
 		funct7 = int((code & 0xFE000000) >> 25)
 	} else if opcode == 99 { //B format
-		imm11 := int((code & 0x00000080) >> 7)
-		imm1_4 := int((code & 0x00000F00) >> 8)
+		imm11 := (code & 0x00000080) >> 7
+		imm1_4 := (code & 0x00000F00) >> 8
 		funct3 = int((code & 0x00007000) >> 12)
 		rs1 = int((code & 0x000F8000) >> 15)
 		rs2 = int((code & 0x01F00000) >> 20)
-		imm5_10 := int((code & 0x7E000000) >> 25)
-		imm12 := int((code & 0x80000000) >> 31)
-		imm = (imm12 << 12) | (imm11 << 11) | (imm5_10) << 5 | (imm1_4) << 1
+		imm5_10 := (code & 0x7E000000) >> 25
+		imm12 := (code & 0x80000000) >> 31
+		imm = int32((imm12 << 12) | (imm11 << 11) | (imm5_10) << 5 | (imm1_4) << 1)
 	} else if opcode == 111 { //J format
 		rd = int((code & 0x00000F80) >> 7)
-		imm19_12 := int((code & 0x000FF000) >> 12)
-		imm11 := int((code & 0x00100000) >> 20)
-		imm10_1 := int((code & 0x7FE00000) >> 21)
-		imm20 := int((code & 0x80000000) >> 31)
-		imm = (imm20 << 20) | (imm19_12 << 12) | (imm11 << 11) | (imm10_1 << 1)
+		imm19_12 := (code & 0x000FF000) >> 12
+		imm11 := (code & 0x00100000) >> 20
+		imm10_1 := (code & 0x7FE00000) >> 21
+		imm20 := (code & 0x80000000) >> 31
+		imm = int32((imm20 << 20) | (imm19_12 << 12) | (imm11 << 11) | (imm10_1 << 1))
 	} else {
 		fmt.Println("unknown format!!")
 	}
@@ -159,6 +159,7 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 				fmt.Println("unknown")
 			}
 		case 1:
+			rv32i.Sll(inst, cpu)
 			fmt.Println("sll")
 		case 2:
 			rv32i.Slt(inst, cpu)
@@ -167,11 +168,14 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 			rv32i.Sltu(inst, cpu)
 			fmt.Println("sltu")
 		case 4:
+			rv32i.Xor(inst, cpu)
 			fmt.Println("xor")
 		case 5:
 			if inst.Funct7 == 0 {
+				rv32i.Srl(inst, cpu)
 				fmt.Println("srl")
 			} else if inst.Funct7 == 32 {
+				rv32i.Sra(inst, cpu)
 				fmt.Println("sra")
 			} else {
 				fmt.Println("unknown")
