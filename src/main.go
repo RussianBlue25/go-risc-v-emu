@@ -48,6 +48,9 @@ func interpretInst(code uint32) (inst instruction.Instruction) {
 		funct3 = int((code & 0x00007000) >> 12)
 		rs1 = int((code & 0x000F8000) >> 15)
 		imm = int((code & 0xFFF00000) >> 20)
+	} else if opcode == 23 || opcode == 55 { //U format
+		rd = int((code & 0x00000F80) >> 7)
+		imm = int((code & 0xFFFFF000) >> 12) << 12
 	} else if opcode == 35 { //S format
 		imm1 := int((code & 0x00000F80) >> 7)
 		funct3 = int((code & 0x00007000) >> 12)
@@ -122,6 +125,8 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 		default:
 			fmt.Println("unknown")
 		}
+	case 23:
+		fmt.Println("lui")
 	case 35:
 		switch inst.Funct3 {
 		case 0:
@@ -164,6 +169,8 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 		default:
 			fmt.Println("unknown")
 		}
+	case 55:
+		fmt.Println("auipc")
 	case 99:
 		switch inst.Funct3 {
 		case 0:
@@ -177,7 +184,7 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 		case 6:
 			fmt.Println("bltu")
 		case 7:
-			fmt.Println("bgeu")	
+			fmt.Println("bgeu")
 		}
 	}
 }
