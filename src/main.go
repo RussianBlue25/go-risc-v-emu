@@ -52,12 +52,21 @@ func interpretInst(code uint32) (inst instruction.Instruction) {
 		funct3 = int((code & 0x00007000) >> 12)
 		rs1 = int((code & 0x000F8000) >> 15)
 		imm = int((code & 0xFFF00000) >> 20)
+	} else if opcode == 35 { //S format
+		imm1 := int((code & 0x00000F80) >> 7)
+		funct3 = int((code & 0x00007000) >> 12)
+		rs1 = int((code & 0x000F8000) >> 15)
+		rs2 = int((code & 0x01F00000) >> 20)
+		imm2 := int((code & 0xFE000000) >> 25)
+		imm = (imm2 << 5) | imm1
 	} else if opcode == 51 {//R format
 		rd = int((code & 0x00000F80) >> 7)
 		funct3 = int((code & 0x00007000) >> 12)
 		rs1 = int((code & 0x000F8000) >> 15)
 		rs2 = int((code & 0x01F00000) >> 20)
 		funct7 = int((code & 0xFE000000) >> 25)
+	} else {
+		fmt.Println("unknown format!!")
 	}
 	return instruction.Instruction{Opcode: opcode, Rd: rd, Rs1: rs1, Rs2: rs2, Funct3: funct3, Funct7: funct7, Imm: imm}
 }
@@ -107,6 +116,15 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 			fmt.Println("andi")
 		default:
 			fmt.Println("unknown")
+		}
+	case 35:
+		switch inst.Funct3 {
+		case 0:
+			fmt.Println("sb")
+		case 1:
+			fmt.Println("sh")
+		case 2:
+			fmt.Println("sw")
 		}
 	case 51:
 		switch inst.Funct3 {
