@@ -26,7 +26,7 @@ func main() {
 		}
 		fmt.Printf("%x\n", code)
 		cpu.Pc += 4
-		inst = interpretInst(code)
+		inst = decode(code)
 		fmt.Println(inst)
 		execute(inst, cpu)
 	}
@@ -34,7 +34,7 @@ func main() {
 	fmt.Println(cpu.Registers[inst.Rd])
 }
 
-func interpretInst(code uint32) (inst instruction.Instruction) {
+func decode(code uint32) (inst instruction.Instruction) {
 	opcode := int(code & 0x0000007F)
 	var rd int
 	var funct3 int
