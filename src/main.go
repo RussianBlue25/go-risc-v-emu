@@ -107,6 +107,7 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 			rv32i.Addi(inst, cpu)
 			fmt.Println("addi")
 		case 1:
+			rv32i.Slli(inst, cpu)
 			fmt.Println("slli")
 		case 2:
 			rv32i.Slti(inst, cpu)
@@ -117,8 +118,10 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 		case 5:
 			shamt := ((inst.Imm & 0xFC0) >> 4)
 			if shamt == 0 {
+				rv32i.Srli(inst, cpu)
 				fmt.Println("srli")
 			} else if shamt == 16 {
+				rv32i.Srai(inst, cpu)
 				fmt.Println("srai")
 			} else {
 				fmt.Println("unknown")
