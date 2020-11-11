@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/RussianBlue25/go-risc-v-emu/src/cpu"
 	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
-	//"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
+	"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
 	"github.com/RussianBlue25/go-risc-v-emu/src/elf"
 )
 
@@ -34,34 +34,9 @@ func main() {
 		fmt.Printf("%x\n", fetchedBinary)
 		cpu.Pc += 4
 		inst = interpretInst(fetchedBinary)
+		execute(inst, cpu)
 	}
 
-	switch inst.Opcode {
-		case 19:
-			switch inst.Funct3 {
-				case 0:
-					//rv32i.Addi(inst, &cpu)
-					fmt.Println("addi")
-				case 1:
-					fmt.Println("slli")
-				case 2:
-					//rv32i.Slti(inst, &cpu)
-					fmt.Println("slti")
-				case 4:
-					//rv32i.Xori(inst, &cpu)
-					fmt.Println("xori")
-				case 5:
-					fmt.Println("srli")
-				case 6:
-					//rv32i.Ori(inst, &cpu)
-					fmt.Println("ori")
-				case 7:
-					//rv32i.Andi(inst, &cpu)
-					fmt.Println("andi")
-				default:
-					fmt.Println("unknown")
-			}
-	}
 	fmt.Println(cpu.Registers[inst.Rd])
 }
 
@@ -79,4 +54,33 @@ func interpretInst(fetchedBinary uint32) (inst instruction.Instruction) {
 		imm = int((fetchedBinary & 0xFFF00000) >> 20)
 	}
 	return instruction.Instruction{Opcode: opcode, Rd: rd, Rs1: rs1, Funct3: funct3, Imm: imm}
+}
+
+func execute(inst instruction.Instruction, cpu cpu.Cpu) {
+	switch inst.Opcode {
+	case 19:
+		switch inst.Funct3 {
+			case 0:
+				rv32i.Addi(inst, &cpu)
+				fmt.Println("addi")
+			case 1:
+				fmt.Println("slli")
+			case 2:
+				rv32i.Slti(inst, &cpu)
+				fmt.Println("slti")
+			case 4:
+				rv32i.Xori(inst, &cpu)
+				fmt.Println("xori")
+			case 5:
+				fmt.Println("srli")
+			case 6:
+				rv32i.Ori(inst, &cpu)
+				fmt.Println("ori")
+			case 7:
+				rv32i.Andi(inst, &cpu)
+				fmt.Println("andi")
+			default:
+				fmt.Println("unknown")
+		}
+	}
 }
