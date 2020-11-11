@@ -13,10 +13,6 @@ func main() {
 
 	Memory = elf.ElfLoad(Memory)
 
-	//TODO: implement type-aware processing
-	// this is I type
-
-	//TODO: implement cpu
 	var inst instruction.Instruction
 	cpu := cpu.Cpu{}
 
@@ -65,6 +61,15 @@ func interpretInst(code uint32) (inst instruction.Instruction) {
 		rs1 = int((code & 0x000F8000) >> 15)
 		rs2 = int((code & 0x01F00000) >> 20)
 		funct7 = int((code & 0xFE000000) >> 25)
+	} else if opcode == 99 { //B format
+		imm11 := int((code & 0x00000080) >> 7)
+		imm1_4 := int((code & 0x00000F00) >> 8)
+		funct3 = int((code & 0x00007000) >> 12)
+		rs1 = int((code & 0x000F8000) >> 15)
+		rs2 = int((code & 0x01F00000) >> 20)
+		imm5_10 := int((code & 0x7E000000) >> 25)
+		imm12 := int((code & 0x80000000) >> 31)
+		imm = (imm12 << 12) | (imm11 << 11) | (imm5_10) << 5 | (imm1_4) << 1
 	} else {
 		fmt.Println("unknown format!!")
 	}
@@ -158,6 +163,21 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 			fmt.Println("and")
 		default:
 			fmt.Println("unknown")
+		}
+	case 99:
+		switch inst.Funct3 {
+		case 0:
+			fmt.Println("beq")
+		case 1:
+			fmt.Println("bne")
+		case 4:
+			fmt.Println("blt")
+		case 5:
+			fmt.Println("bge")
+		case 6:
+			fmt.Println("bltu")
+		case 7:
+			fmt.Println("bgeu")	
 		}
 	}
 }
