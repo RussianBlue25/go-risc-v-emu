@@ -28,10 +28,10 @@ func main() {
 		cpu.Pc += 4
 		inst = decode(code)
 		fmt.Println(inst)
-		execute(inst, cpu)
-	}
+		execute(inst, &cpu)
 
-	fmt.Println(cpu.Registers[inst.Rd])
+		fmt.Println(cpu.Registers)
+	}
 }
 
 func decode(code uint32) (inst instruction.Instruction) {
@@ -86,7 +86,7 @@ func decode(code uint32) (inst instruction.Instruction) {
 	return instruction.Instruction{Opcode: opcode, Rd: rd, Rs1: rs1, Rs2: rs2, Funct3: funct3, Funct7: funct7, Imm: imm}
 }
 
-func execute(inst instruction.Instruction, cpu cpu.Cpu) {
+func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 	switch inst.Opcode {
 	case 3:
 		switch inst.Funct3 {
@@ -104,15 +104,15 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 	case 19:
 		switch inst.Funct3 {
 		case 0:
-			rv32i.Addi(inst, &cpu)
+			rv32i.Addi(inst, cpu)
 			fmt.Println("addi")
 		case 1:
 			fmt.Println("slli")
 		case 2:
-			rv32i.Slti(inst, &cpu)
+			rv32i.Slti(inst, cpu)
 			fmt.Println("slti")
 		case 4:
-			rv32i.Xori(inst, &cpu)
+			rv32i.Xori(inst, cpu)
 			fmt.Println("xori")
 		case 5:
 			shamt := ((inst.Imm & 0xFC0) >> 4)
@@ -124,10 +124,10 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 				fmt.Println("unknown")
 			}
 		case 6:
-			rv32i.Ori(inst, &cpu)
+			rv32i.Ori(inst, cpu)
 			fmt.Println("ori")
 		case 7:
-			rv32i.Andi(inst, &cpu)
+			rv32i.Andi(inst, cpu)
 			fmt.Println("andi")
 		default:
 			fmt.Println("unknown")
