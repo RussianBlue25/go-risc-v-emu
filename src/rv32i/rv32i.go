@@ -48,4 +48,9 @@ func Srai(inst instruction.Instruction, cpu *cpu.Cpu) {
 	}
 }
 
+func Jal(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = int(cpu.Pc) + 4
+	cpu.Pc += uint32(inst.Imm)
+}
+
 

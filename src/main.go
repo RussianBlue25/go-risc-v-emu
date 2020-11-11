@@ -197,6 +197,7 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 			fmt.Println("bgeu")
 		}
 	case 111:
+		rv32i.Jal(inst, cpu)
 		fmt.Println("jal")
 	case 115:
 		fmt.Println("jalr")
