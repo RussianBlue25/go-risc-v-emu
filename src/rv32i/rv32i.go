@@ -58,4 +58,42 @@ func Jalr(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Pc += (cpu.Registers[inst.Rs1] + inst.Imm) & 0xFFE //12bit
 }
 
+func Add(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] + cpu.Registers[inst.Rs2]
+}
+
+func Sub(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] - cpu.Registers[inst.Rs2]
+}
+
+func Sltu(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if uint32(cpu.Registers[inst.Rs1]) < uint32(cpu.Registers[inst.Rs2]) {
+		cpu.Registers[inst.Rd] = 1
+	} else {
+		cpu.Registers[inst.Rd] = 0
+	}
+}
+
+func Slt(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if cpu.Registers[inst.Rs1] < cpu.Registers[inst.Rs2] {
+		cpu.Registers[inst.Rd] = 1
+	} else {
+		cpu.Registers[inst.Rd] = 0
+	}
+}
+
+func And(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] & cpu.Registers[inst.Rs2]
+}
+
+func Or(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | cpu.Registers[inst.Rs2]
+}
+
+func Xor(inst instruction.Instruction, cpu *cpu.Cpu) {
+	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] ^ cpu.Registers[inst.Rs2]
+}
+
+
+
 
