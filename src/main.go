@@ -49,7 +49,7 @@ func interpretInst(fetchedBinary uint32) (inst instruction.Instruction) {
 	var rs2 int
 	var imm int
 
-	if opcode == 19 { //I format
+	if opcode == 19 || opcode == 3 { //I format
 		rd = int((fetchedBinary & 0x00000F80) >> 7)
 		funct3 = int((fetchedBinary & 0x00007000) >> 12)
 		rs1 = int((fetchedBinary & 0x000F8000) >> 15)
@@ -66,69 +66,82 @@ func interpretInst(fetchedBinary uint32) (inst instruction.Instruction) {
 
 func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 	switch inst.Opcode {
-		case 19:
-			switch inst.Funct3 {
-				case 0:
-					rv32i.Addi(inst, &cpu)
-					fmt.Println("addi")
-				case 1:
-					fmt.Println("slli")
-				case 2:
-					rv32i.Slti(inst, &cpu)
-					fmt.Println("slti")
-				case 4:
-					rv32i.Xori(inst, &cpu)
-					fmt.Println("xori")
-				case 5:
-					shamt := ((inst.Imm & 0xFC0) >> 4)
-					if shamt == 0 {
-						fmt.Println("srli")
-					} else if shamt == 16 {
-						fmt.Println("srai")
-					} else {
-						fmt.Println("unknown")
-					}
-				case 6:
-					rv32i.Ori(inst, &cpu)
-					fmt.Println("ori")
-				case 7:
-					rv32i.Andi(inst, &cpu)
-					fmt.Println("andi")
-				default:
-					fmt.Println("unknown")
+	case 3:
+		switch inst.Funct3 {
+		case 0:
+			fmt.Println("lb")
+		case 1:
+			fmt.Println("lh")
+		case 2:
+			fmt.Println("lw")
+		case 4:
+			fmt.Println("lbu")
+		case 5:
+			fmt.Println("lhu")
+		}
+	case 19:
+		switch inst.Funct3 {
+		case 0:
+			rv32i.Addi(inst, &cpu)
+			fmt.Println("addi")
+		case 1:
+			fmt.Println("slli")
+		case 2:
+			rv32i.Slti(inst, &cpu)
+			fmt.Println("slti")
+		case 4:
+			rv32i.Xori(inst, &cpu)
+			fmt.Println("xori")
+		case 5:
+			shamt := ((inst.Imm & 0xFC0) >> 4)
+			if shamt == 0 {
+				fmt.Println("srli")
+			} else if shamt == 16 {
+				fmt.Println("srai")
+			} else {
+				fmt.Println("unknown")
 			}
-		case 51:
-			switch inst.Funct3 {
-				case 0:
-					if inst.Funct7 == 0 {
-						fmt.Println("add")
-					} else if inst.Funct7 == 32 {
-						fmt.Println("sub")
-					} else {
-						fmt.Println("unknown")
-					}
-				case 1:
-					fmt.Println("sll")
-				case 2:
-					fmt.Println("slt")
-				case 3:
-					fmt.Println("sltu")
-				case 4:
-					fmt.Println("xor")
-				case 5:
-					if inst.Funct7 == 0 {
-						fmt.Println("srl")
-					} else if inst.Funct7 == 32 {
-						fmt.Println("sra")
-					} else {
-						fmt.Println("unknown")
-					}
-				case 6:
-					fmt.Println("or")
-				case 7:
-					fmt.Println("and")
-				default:
-					fmt.Println("unknown")
+		case 6:
+			rv32i.Ori(inst, &cpu)
+			fmt.Println("ori")
+		case 7:
+			rv32i.Andi(inst, &cpu)
+			fmt.Println("andi")
+		default:
+			fmt.Println("unknown")
+		}
+	case 51:
+		switch inst.Funct3 {
+		case 0:
+			if inst.Funct7 == 0 {
+				fmt.Println("add")
+			} else if inst.Funct7 == 32 {
+				fmt.Println("sub")
+			} else {
+				fmt.Println("unknown")
+			}
+		case 1:
+			fmt.Println("sll")
+		case 2:
+			fmt.Println("slt")
+		case 3:
+			fmt.Println("sltu")
+		case 4:
+			fmt.Println("xor")
+		case 5:
+			if inst.Funct7 == 0 {
+				fmt.Println("srl")
+			} else if inst.Funct7 == 32 {
+				fmt.Println("sra")
+			} else {
+				fmt.Println("unknown")
+			}
+		case 6:
+			fmt.Println("or")
+		case 7:
+			fmt.Println("and")
+		default:
+			fmt.Println("unknown")
 		}
 	}
 }
