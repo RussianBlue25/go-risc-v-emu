@@ -20,17 +20,17 @@ func main() {
 	var inst instruction.Instruction
 	cpu := cpu.Cpu{}
 
-	var fetchedBinary uint32
+	var code uint32
 
 	for {
-		fetchedBinary = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
+		code = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
 		//TODO: consider memory's last
-		if fetchedBinary == 0x0000 {
+		if code == 0x0000 {
 			break
 		}
-		fmt.Printf("%x\n", fetchedBinary)
+		fmt.Printf("%x\n", code)
 		cpu.Pc += 4
-		inst = interpretInst(fetchedBinary)
+		inst = interpretInst(code)
 		fmt.Println(inst)
 		execute(inst, cpu)
 	}
@@ -38,8 +38,8 @@ func main() {
 	fmt.Println(cpu.Registers[inst.Rd])
 }
 
-func interpretInst(fetchedBinary uint32) (inst instruction.Instruction) {
-	opcode := int(fetchedBinary & 0x0000007F)
+func interpretInst(code uint32) (inst instruction.Instruction) {
+	opcode := int(code & 0x0000007F)
 	var rd int
 	var funct3 int
 	var funct7 int
@@ -48,16 +48,16 @@ func interpretInst(fetchedBinary uint32) (inst instruction.Instruction) {
 	var imm int
 
 	if opcode == 19 || opcode == 3 { //I format
-		rd = int((fetchedBinary & 0x00000F80) >> 7)
-		funct3 = int((fetchedBinary & 0x00007000) >> 12)
-		rs1 = int((fetchedBinary & 0x000F8000) >> 15)
-		imm = int((fetchedBinary & 0xFFF00000) >> 20)
+		rd = int((code & 0x00000F80) >> 7)
+		funct3 = int((code & 0x00007000) >> 12)
+		rs1 = int((code & 0x000F8000) >> 15)
+		imm = int((code & 0xFFF00000) >> 20)
 	} else if opcode == 51 {//R format
-		rd = int((fetchedBinary & 0x00000F80) >> 7)
-		funct3 = int((fetchedBinary & 0x00007000) >> 12)
-		rs1 = int((fetchedBinary & 0x000F8000) >> 15)
-		rs2 = int((fetchedBinary & 0x01F00000) >> 20)
-		funct7 = int((fetchedBinary & 0xFE000000) >> 25)
+		rd = int((code & 0x00000F80) >> 7)
+		funct3 = int((code & 0x00007000) >> 12)
+		rs1 = int((code & 0x000F8000) >> 15)
+		rs2 = int((code & 0x01F00000) >> 20)
+		funct7 = int((code & 0xFE000000) >> 25)
 	}
 	return instruction.Instruction{Opcode: opcode, Rd: rd, Rs1: rs1, Rs2: rs2, Funct3: funct3, Funct7: funct7, Imm: imm}
 }
