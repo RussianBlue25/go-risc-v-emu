@@ -73,6 +73,13 @@ func interpretInst(code uint32) (inst instruction.Instruction) {
 		imm5_10 := int((code & 0x7E000000) >> 25)
 		imm12 := int((code & 0x80000000) >> 31)
 		imm = (imm12 << 12) | (imm11 << 11) | (imm5_10) << 5 | (imm1_4) << 1
+	} else if opcode == 111 { //J format
+			rd = int((code & 0x00000F80) >> 7)
+			imm19_12 := int((code & 0x000FF000) >> 12)
+			imm11 := int((code & 0x00100000) >> 20)
+			imm10_1 := int((code & 0x7FE00000) >> 21)
+			imm20 := int((code & 0x80000000) >> 31)
+			imm = (imm20 << 20) | (imm19_12 << 12) | (imm11 << 11) | (imm10_1 << 1)
 	} else {
 		fmt.Println("unknown format!!")
 	}
@@ -186,5 +193,7 @@ func execute(inst instruction.Instruction, cpu cpu.Cpu) {
 		case 7:
 			fmt.Println("bgeu")
 		}
+	case 111:
+		fmt.Println("jal")
 	}
 }
