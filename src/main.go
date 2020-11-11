@@ -196,16 +196,22 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
 	case 99:
 		switch inst.Funct3 {
 		case 0:
+			rv32i.Beq(inst, cpu)
 			fmt.Println("beq")
 		case 1:
+			rv32i.Bne(inst, cpu)
 			fmt.Println("bne")
 		case 4:
+			rv32i.Blt(inst, cpu)
 			fmt.Println("blt")
 		case 5:
+			rv32i.Bge(inst, cpu)
 			fmt.Println("bge")
 		case 6:
+			rv32i.Bltu(inst, cpu)
 			fmt.Println("bltu")
 		case 7:
+			rv32i.Bgeu(inst, cpu)
 			fmt.Println("bgeu")
 		}
 	case 111:
