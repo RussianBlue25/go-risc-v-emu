@@ -120,3 +120,51 @@ func Lui(inst instruction.Instruction, cpu *cpu.Cpu) {
 func Auipc(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Pc + (inst.Imm << 12)
 }
+
+func Beq(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if cpu.Registers[inst.Rs1] == cpu.Registers[inst.Rs2] {
+		cpu.Pc += inst.Imm
+	} else {
+		cpu.Pc += 4
+	}
+}
+
+func Bne(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if cpu.Registers[inst.Rs1] != cpu.Registers[inst.Rs2] {
+		cpu.Pc += inst.Imm
+	} else {
+		cpu.Pc += 4
+	}
+}
+
+func Blt(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if cpu.Registers[inst.Rs1] < cpu.Registers[inst.Rs2] {
+		cpu.Pc += inst.Imm
+	} else {
+		cpu.Pc += 4
+	}
+}
+
+func Bge(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if cpu.Registers[inst.Rs1] >= cpu.Registers[inst.Rs2] {
+		cpu.Pc += inst.Imm
+	} else {
+		cpu.Pc += 4
+	}
+}
+
+func Bltu(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if uint32(cpu.Registers[inst.Rs1]) < uint32(cpu.Registers[inst.Rs2]) {
+		cpu.Pc += inst.Imm
+	} else {
+		cpu.Pc += 4
+	}
+}
+
+func Bgeu(inst instruction.Instruction, cpu *cpu.Cpu) {
+	if uint32(cpu.Registers[inst.Rs1]) >= uint32(cpu.Registers[inst.Rs2]) {
+		cpu.Pc += inst.Imm
+	} else {
+		cpu.Pc += 4
+	}
+}
