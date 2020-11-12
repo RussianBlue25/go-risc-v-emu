@@ -1,11 +1,11 @@
 package instruction
 
 type Instruction struct {
-	Opcode int
-	Rd     int
-	Rs1    int
-	Rs2	   int
-	Funct3 int
-	Funct7 int
+	Opcode uint8
+	Rd     uint8
+	Rs1    uint8
+	Rs2	   uint8
+	Funct3 uint8
+	Funct7 uint8
 	Imm    int32
 }

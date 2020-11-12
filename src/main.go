@@ -35,46 +35,46 @@ func main() {
 }
 
 func decode(code uint32) (inst instruction.Instruction) {
-	opcode := int(code & 0x0000007F)
-	var rd int
-	var funct3 int
-	var funct7 int
-	var rs1 int
-	var rs2 int
+	opcode := uint8(code & 0x0000007F)
+	var rd uint8
+	var funct3 uint8
+	var funct7 uint8
+	var rs1 uint8
+	var rs2 uint8
 	var imm int32
 
 	if opcode == 19 || opcode == 3 || opcode == 115 { //I format
-		rd = int((code & 0x00000F80) >> 7)
-		funct3 = int((code & 0x00007000) >> 12)
-		rs1 = int((code & 0x000F8000) >> 15)
+		rd = uint8((code & 0x00000F80) >> 7)
+		funct3 = uint8((code & 0x00007000) >> 12)
+		rs1 = uint8((code & 0x000F8000) >> 15)
 		imm = int32((code & 0xFFF00000) >> 20)
 	} else if opcode == 23 || opcode == 55 { //U format
-		rd = int((code & 0x00000F80) >> 7)
+		rd = uint8((code & 0x00000F80) >> 7)
 		imm = int32((code & 0xFFFFF000) >> 12) << 12
 	} else if opcode == 35 { //S format
 		imm1 := (code & 0x00000F80) >> 7
-		funct3 = int((code & 0x00007000) >> 12)
-		rs1 = int((code & 0x000F8000) >> 15)
-		rs2 = int((code & 0x01F00000) >> 20)
+		funct3 = uint8((code & 0x00007000) >> 12)
+		rs1 = uint8((code & 0x000F8000) >> 15)
+		rs2 = uint8((code & 0x01F00000) >> 20)
 		imm2 := (code & 0xFE000000) >> 25
 		imm = int32((imm2 << 5) | imm1)
 	} else if opcode == 51 {//R format
-		rd = int((code & 0x00000F80) >> 7)
-		funct3 = int((code & 0x00007000) >> 12)
-		rs1 = int((code & 0x000F8000) >> 15)
-		rs2 = int((code & 0x01F00000) >> 20)
-		funct7 = int((code & 0xFE000000) >> 25)
+		rd = uint8((code & 0x00000F80) >> 7)
+		funct3 = uint8((code & 0x00007000) >> 12)
+		rs1 = uint8((code & 0x000F8000) >> 15)
+		rs2 = uint8((code & 0x01F00000) >> 20)
+		funct7 = uint8((code & 0xFE000000) >> 25)
 	} else if opcode == 99 { //B format
 		imm11 := (code & 0x00000080) >> 7
 		imm1_4 := (code & 0x00000F00) >> 8
-		funct3 = int((code & 0x00007000) >> 12)
-		rs1 = int((code & 0x000F8000) >> 15)
-		rs2 = int((code & 0x01F00000) >> 20)
+		funct3 = uint8((code & 0x00007000) >> 12)
+		rs1 = uint8((code & 0x000F8000) >> 15)
+		rs2 = uint8((code & 0x01F00000) >> 20)
 		imm5_10 := (code & 0x7E000000) >> 25
 		imm12 := (code & 0x80000000) >> 31
 		imm = int32((imm12 << 12) | (imm11 << 11) | (imm5_10) << 5 | (imm1_4) << 1)
 	} else if opcode == 111 { //J format
-		rd = int((code & 0x00000F80) >> 7)
+		rd = uint8((code & 0x00000F80) >> 7)
 		imm19_12 := (code & 0x000FF000) >> 12
 		imm11 := (code & 0x00100000) >> 20
 		imm10_1 := (code & 0x7FE00000) >> 21
