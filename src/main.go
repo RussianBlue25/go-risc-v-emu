@@ -32,6 +32,10 @@ func main() {
 		fmt.Printf("Rd is %x\n", inst.Rd)
 		fmt.Printf("Imm is %x\n", inst.Imm)
 		execute(inst, &cpu)
+		// zero register
+		if cpu.Registers[0] != 0 {
+			cpu.Registers[0] = 0
+		}
 
 		fmt.Println(cpu.Registers)
 	}
