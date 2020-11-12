@@ -24,10 +24,13 @@ func main() {
 		if code == 0x0000 {
 			break
 		}
-		fmt.Printf("%x\n", code)
+		//fmt.Printf("%x\n", code)
 		inst = decode(code)
-		fmt.Println(cpu.Pc)
-		fmt.Println(inst)
+		fmt.Printf("%x\n", cpu.Pc)
+		fmt.Printf("Rs1 is %x\n", inst.Rs1)
+		fmt.Printf("Rs2 is %x\n", inst.Rs2)
+		fmt.Printf("Rd is %x\n", inst.Rd)
+		fmt.Printf("Imm is %x\n", inst.Imm)
 		execute(inst, &cpu)
 
 		fmt.Println(cpu.Registers)
