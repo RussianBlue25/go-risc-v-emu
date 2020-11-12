@@ -3,6 +3,7 @@ package rv32i
 import (
 	"github.com/RussianBlue25/go-risc-v-emu/src/cpu"
 	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
+	"fmt"
 )
 
 func Addi(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -63,7 +64,8 @@ func Jal(inst instruction.Instruction, cpu *cpu.Cpu) {
 
 func Jalr(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Pc + 4
-	cpu.Pc += (cpu.Registers[inst.Rs1] + inst.Imm) & 0xFFE //12bit
+	cpu.Pc = (cpu.Registers[inst.Rs1] + inst.Imm) & 0xFFE //12bit
+	fmt.Printf("%x\n", cpu.Pc)
 }
 
 func Add(inst instruction.Instruction, cpu *cpu.Cpu) {
