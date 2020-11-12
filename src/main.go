@@ -58,7 +58,7 @@ func decode(code uint32) (inst instruction.Instruction) {
 		imm = int32((code & 0xFFF00000) >> 20)
 	} else if opcode == 23 || opcode == 55 { //U format
 		rd = uint8((code & 0x00000F80) >> 7)
-		imm = int32((code & 0xFFFFF000) >> 12)
+		imm = int32((code & 0xFFFFF000) >> 12) << 12
 	} else if opcode == 35 { //S format
 		imm1 := (code & 0x00000F80) >> 7
 		funct3 = uint8((code & 0x00007000) >> 12)

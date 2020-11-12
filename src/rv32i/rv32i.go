@@ -134,12 +134,12 @@ func Sra(inst instruction.Instruction, cpu *cpu.Cpu) {
 }
 
 func Lui(inst instruction.Instruction, cpu *cpu.Cpu) {
-	cpu.Registers[inst.Rd] = (inst.Imm << 12)
+	cpu.Registers[inst.Rd] = inst.Imm
 	cpu.Pc += 4
 }
 
 func Auipc(inst instruction.Instruction, cpu *cpu.Cpu) {
-	cpu.Registers[inst.Rd] = cpu.Pc + (inst.Imm << 12)
+	cpu.Registers[inst.Rd] = cpu.Pc + inst.Imm
 	cpu.Pc += 4
 }
 
