@@ -7,6 +7,7 @@ import (
 
 func Addi(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] + inst.Imm
+	cpu.Pc += 4
 }
 
 func Slti(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -15,28 +16,34 @@ func Slti(inst instruction.Instruction, cpu *cpu.Cpu) {
 	} else {
 		cpu.Registers[inst.Rd] = 0
 	}
+	cpu.Pc += 4
 }
 
 func Andi(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] & inst.Imm
+	cpu.Pc += 4
 }
 
 func Ori(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | inst.Imm
+	cpu.Pc += 4
 }
 
 func Xori(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] ^ inst.Imm
+	cpu.Pc += 4
 }
 
 func Slli(inst instruction.Instruction, cpu *cpu.Cpu) {
 	shift := inst.Imm & 0x01F
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] << shift
+	cpu.Pc += 4
 }
 
 func Srli(inst instruction.Instruction, cpu *cpu.Cpu) {
 	shift := inst.Imm & 0x01F
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> shift
+	cpu.Pc += 4
 }
 
 func Srai(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -46,6 +53,7 @@ func Srai(inst instruction.Instruction, cpu *cpu.Cpu) {
 		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> 1
 		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | (signedBit << 7)
 	}
+	cpu.Pc += 4
 }
 
 func Jal(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -60,10 +68,12 @@ func Jalr(inst instruction.Instruction, cpu *cpu.Cpu) {
 
 func Add(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] + cpu.Registers[inst.Rs2]
+	cpu.Pc += 4
 }
 
 func Sub(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] - cpu.Registers[inst.Rs2]
+	cpu.Pc += 4
 }
 
 func Sltu(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -72,6 +82,7 @@ func Sltu(inst instruction.Instruction, cpu *cpu.Cpu) {
 	} else {
 		cpu.Registers[inst.Rd] = 0
 	}
+	cpu.Pc += 4
 }
 
 func Slt(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -80,28 +91,34 @@ func Slt(inst instruction.Instruction, cpu *cpu.Cpu) {
 	} else {
 		cpu.Registers[inst.Rd] = 0
 	}
+	cpu.Pc += 4
 }
 
 func And(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] & cpu.Registers[inst.Rs2]
+	cpu.Pc += 4
 }
 
 func Or(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | cpu.Registers[inst.Rs2]
+	cpu.Pc += 4
 }
 
 func Xor(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] ^ cpu.Registers[inst.Rs2]
+	cpu.Pc += 4
 }
 
 func Sll(inst instruction.Instruction, cpu *cpu.Cpu) {
 	shift := cpu.Registers[inst.Rs2] & 0x1F
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] << shift
+	cpu.Pc += 4
 }
 
 func Srl(inst instruction.Instruction, cpu *cpu.Cpu) {
 	shift := cpu.Registers[inst.Rs2] & 0x1F
 	cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> shift
+	cpu.Pc += 4
 }
 
 func Sra(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -111,14 +128,17 @@ func Sra(inst instruction.Instruction, cpu *cpu.Cpu) {
 		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] >> 1
 		cpu.Registers[inst.Rd] = cpu.Registers[inst.Rs1] | (signedBit << 7)
 	}
+	cpu.Pc += 4
 }
 
 func Lui(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = (inst.Imm << 12)
+	cpu.Pc += 4
 }
 
 func Auipc(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Pc + (inst.Imm << 12)
+	cpu.Pc += 4
 }
 
 func Beq(inst instruction.Instruction, cpu *cpu.Cpu) {

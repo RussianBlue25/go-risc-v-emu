@@ -25,8 +25,8 @@ func main() {
 			break
 		}
 		fmt.Printf("%x\n", code)
-		cpu.Pc += 4
 		inst = decode(code)
+		fmt.Println(cpu.Pc)
 		fmt.Println(inst)
 		execute(inst, &cpu)
 
