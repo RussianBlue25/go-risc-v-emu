@@ -20,7 +20,6 @@ func main() {
 
 	for i := 0; i < 65536; i++{
 		code = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
-		//TODO: consider memory's last
 		if code == 0x00000000 {
 			continue
 		}
