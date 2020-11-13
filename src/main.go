@@ -155,10 +155,13 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
 	case 35:
 		switch inst.Funct3 {
 		case 0:
+			rv32i.Sb(inst, cpu, mem)
 			fmt.Println("sb")
 		case 1:
+			rv32i.Sh(inst, cpu, mem)
 			fmt.Println("sh")
 		case 2:
+			rv32i.Sw(inst, cpu, mem)
 			fmt.Println("sw")
 		}
 	case 51:
