@@ -64,8 +64,8 @@ func Jal(inst instruction.Instruction, cpu *cpu.Cpu) {
 
 func Jalr(inst instruction.Instruction, cpu *cpu.Cpu) {
 	cpu.Registers[inst.Rd] = cpu.Pc + 4
-	cpu.Pc = (cpu.Registers[inst.Rs1] + inst.Imm) & 0xFFE //12bit
-	fmt.Printf("%x\n", cpu.Pc)
+	cpu.Pc = (cpu.Registers[inst.Rs1] + inst.Imm) & 0x00000FFE //12bit
+	fmt.Printf("%d\n", cpu.Pc)
 }
 
 func Add(inst instruction.Instruction, cpu *cpu.Cpu) {
@@ -189,4 +189,34 @@ func Bgeu(inst instruction.Instruction, cpu *cpu.Cpu) {
 	} else {
 		cpu.Pc += 4
 	}
+}
+
+//TODO: are these right implementation?
+func Lb(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+	cpu.Registers[inst.Rd] = int32(int8(mem[cpu.Registers[inst.Rs1]]))
+	cpu.Pc += 4
+}
+
+
+func Lh(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+	b := (mem[cpu.Registers[inst.Rs1]+1] << 8) | mem[cpu.Registers[inst.Rs1]]
+	cpu.Registers[inst.Rd] = int32(int16(b))
+	cpu.Pc += 4
+}
+
+func Lw(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+	b := (mem[cpu.Registers[inst.Rs1]+3] << 24) | (mem[cpu.Registers[inst.Rs1]+2] << 16) | (mem[cpu.Registers[inst.Rs1]+1] << 8) | mem[cpu.Registers[inst.Rs1]]
+	cpu.Registers[inst.Rd] = int32(b)
+	cpu.Pc += 4
+}
+
+func Lbu(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+	cpu.Registers[inst.Rd] = int32(uint32(int8(mem[cpu.Registers[inst.Rs1]])))
+	cpu.Pc += 4
+}
+
+func Lhu(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+	b := (mem[cpu.Registers[inst.Rs1]+1] << 8) | mem[cpu.Registers[inst.Rs1]]
+	cpu.Registers[inst.Rd] = int32(uint32(int16(b)))
+	cpu.Pc += 4
 }

@@ -32,7 +32,7 @@ func main() {
 		fmt.Printf("Rd is %x\n", inst.Rd)
 		fmt.Printf("Imm is %x\n", inst.Imm)
 		fmt.Println(inst)
-		execute(inst, &cpu)
+		execute(inst, &cpu, Memory)
 		// zero register
 		if cpu.Registers[0] != 0 {
 			cpu.Registers[0] = 0
@@ -55,10 +55,10 @@ func decode(code uint32) (inst instruction.Instruction) {
 		rd = uint8((code & 0x00000F80) >> 7)
 		funct3 = uint8((code & 0x00007000) >> 12)
 		rs1 = uint8((code & 0x000F8000) >> 15)
-		imm = int32((code & 0xFFF00000) >> 20)
+		imm = int32(code & 0xFFF00000) >> 20
 	} else if opcode == 23 || opcode == 55 { //U format
 		rd = uint8((code & 0x00000F80) >> 7)
-		imm = int32((code & 0xFFFFF000) >> 12) << 12
+		imm = (int32(code & 0xFFFFF000) >> 12) << 12
 	} else if opcode == 35 { //S format
 		imm1 := (code & 0x00000F80) >> 7
 		funct3 = uint8((code & 0x00007000) >> 12)
@@ -80,33 +80,38 @@ func decode(code uint32) (inst instruction.Instruction) {
 		rs2 = uint8((code & 0x01F00000) >> 20)
 		imm5_10 := (code & 0x7E000000) >> 25
 		imm12 := (code & 0x80000000) >> 31
-		imm = int32((imm12 << 12) | (imm11 << 11) | (imm5_10) << 5 | (imm1_4) << 1)
+		imm = int32(imm12 << 12) | int32(imm11 << 11) | int32(imm5_10) << 5 | int32(imm1_4) << 1
 	} else if opcode == 111 { //J format
 		rd = uint8((code & 0x00000F80) >> 7)
 		imm19_12 := (code & 0x000FF000) >> 12
 		imm11 := (code & 0x00100000) >> 20
 		imm10_1 := (code & 0x7FE00000) >> 21
 		imm20 := (code & 0x80000000) >> 31
-		imm = int32((imm20 << 20) | (imm19_12 << 12) | (imm11 << 11) | (imm10_1 << 1))
+		imm = int32(imm20 << 20) | int32(imm19_12 << 12) | int32(imm11 << 11) | int32(imm10_1 << 1)
 	} else {
 		fmt.Println("unknown format!!")
 	}
 	return instruction.Instruction{Opcode: opcode, Rd: rd, Rs1: rs1, Rs2: rs2, Funct3: funct3, Funct7: funct7, Imm: imm}
 }
 
-func execute(inst instruction.Instruction, cpu *cpu.Cpu) {
+func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
 	switch inst.Opcode {
 	case 3:
 		switch inst.Funct3 {
 		case 0:
+			rv32i.Lb(inst, cpu, mem)
 			fmt.Println("lb")
 		case 1:
+			rv32i.Lh(inst, cpu, mem)
 			fmt.Println("lh")
 		case 2:
+			rv32i.Lw(inst, cpu, mem)
 			fmt.Println("lw")
 		case 4:
+			rv32i.Lbu(inst, cpu, mem)
 			fmt.Println("lbu")
 		case 5:
+			rv32i.Lhu(inst, cpu, mem)
 			fmt.Println("lhu")
 		}
 	case 19:
