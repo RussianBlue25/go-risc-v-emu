@@ -222,21 +222,20 @@ func Lhu(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
 }
 
 func Sb(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
-	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs1] & 0x000000FF)
+	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs2] & 0x000000FF)
 	//cpu.Pc += 4
 }
 
 func Sh(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
-	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs1] & 0x000000FF)
-	mem[cpu.Registers[inst.Rs1]+1] = uint8(cpu.Registers[inst.Rs1] & 0x0000FF00)
+	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs2] & 0x000000FF)
+	mem[cpu.Registers[inst.Rs1]+1] = uint8((cpu.Registers[inst.Rs2] >> 8) & 0x000000FF )
 	//cpu.Pc += 4
 }
 
 func Sw(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
-	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs1] & 0x000000FF)
-	mem[cpu.Registers[inst.Rs1]+1] = uint8(cpu.Registers[inst.Rs1] & 0x0000FF00)
-	mem[cpu.Registers[inst.Rs1]+2] = uint8(cpu.Registers[inst.Rs1] & 0x00FF0000)
-	mem[cpu.Registers[inst.Rs1]+3] = uint8(cpu.Registers[inst.Rs1] & 0xFF000000)
+	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs2] & 0x000000FF)
+	mem[cpu.Registers[inst.Rs1]+1] = uint8((cpu.Registers[inst.Rs2]  >> 8) & 0x000000FF)
+	mem[cpu.Registers[inst.Rs1]+2] = uint8((cpu.Registers[inst.Rs2] >> 16) & 0x000000FF)
+	mem[cpu.Registers[inst.Rs1]+3] = uint8((cpu.Registers[inst.Rs2] >> 24) & 0x000000FF)
 	//cpu.Pc += 4
 }
-
