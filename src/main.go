@@ -53,7 +53,7 @@ func decode(code uint32) (inst instruction.Instruction) {
 	var rs2 uint8
 	var imm int32
 
-	if opcode == 19 || opcode == 3 || opcode == 115 { //I format
+	if opcode == 19 || opcode == 3 || opcode == 103 { //I format
 		rd = uint8((code & 0x00000F80) >> 7)
 		funct3 = uint8((code & 0x00007000) >> 12)
 		rs1 = uint8((code & 0x000F8000) >> 15)
