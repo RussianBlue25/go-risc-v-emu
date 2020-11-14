@@ -23,7 +23,7 @@ func main() {
 	for {
 		fmt.Printf("%x\n", cpu.Pc)
 		code = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
-		if inst == 0x0000 {
+		if code == 0x0000 {
 			break
 		}
 		cpu.Pc += 4
