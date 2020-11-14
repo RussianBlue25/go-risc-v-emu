@@ -21,7 +21,7 @@ func main() {
 	var code uint32
 
 	for {
-		if cpu.Pc > 65536 {
+		if cpu.Pc > 1024*1024 {
 			break
 		}
 		fmt.Printf("%x\n", cpu.Pc)
@@ -151,8 +151,8 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 			fmt.Println("unknown")
 		}
 	case 23:
-		rv32i.Lui(inst, cpu)
-		fmt.Println("lui")
+		rv32i.Auipc(inst, cpu)
+		fmt.Println("auipc")
 	case 35:
 		switch inst.Funct3 {
 		case 0:
@@ -209,8 +209,8 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 			fmt.Println("unknown")
 		}
 	case 55:
-		rv32i.Auipc(inst, cpu)
-		fmt.Println("auipc")
+		rv32i.Lui(inst, cpu)
+		fmt.Println("lui")
 	case 99:
 		switch inst.Funct3 {
 		case 0:

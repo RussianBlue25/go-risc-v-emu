@@ -6,7 +6,7 @@ import (
     "io/ioutil"
 )
 
-func BinLoad(Memory [65536]uint8) [65536]uint8 {
+func BinLoad(Memory [1024*1024]uint8) [1024*1024]uint8 {
     file, err := os.Open(os.Args[1])
 	if err != nil {
 		fmt.Println("can't open file")
