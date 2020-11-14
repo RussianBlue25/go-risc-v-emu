@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	var Memory [65536]uint8
+	var Memory [1024*1024]uint8
 
 	//Memory = elf.ElfLoad(Memory)
 	Memory = bin.BinLoad(Memory)
@@ -96,7 +96,7 @@ func decode(code uint32) (inst instruction.Instruction) {
 	return instruction.Instruction{Opcode: opcode, Rd: rd, Rs1: rs1, Rs2: rs2, Funct3: funct3, Funct7: funct7, Imm: imm}
 }
 
-func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	switch inst.Opcode {
 	case 3:
 		switch inst.Funct3 {

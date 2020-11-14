@@ -160,40 +160,40 @@ func Bgeu(inst instruction.Instruction, cpu *cpu.Cpu) {
 }
 
 //TODO: are these right implementation?
-func Lb(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Lb(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	cpu.Registers[inst.Rd] = int32(int8(mem[cpu.Registers[inst.Rs1]]))
 }
 
 
-func Lh(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Lh(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	b := (mem[cpu.Registers[inst.Rs1]+1] << 8) | mem[cpu.Registers[inst.Rs1]]
 	cpu.Registers[inst.Rd] = int32(int16(b))
 }
 
-func Lw(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Lw(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	b := (mem[cpu.Registers[inst.Rs1]+3] << 24) | (mem[cpu.Registers[inst.Rs1]+2] << 16) | (mem[cpu.Registers[inst.Rs1]+1] << 8) | mem[cpu.Registers[inst.Rs1]]
 	cpu.Registers[inst.Rd] = int32(b)
 }
 
-func Lbu(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Lbu(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	cpu.Registers[inst.Rd] = int32(uint32(int8(mem[cpu.Registers[inst.Rs1]])))
 }
 
-func Lhu(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Lhu(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	b := (mem[cpu.Registers[inst.Rs1]+1] << 8) | mem[cpu.Registers[inst.Rs1]]
 	cpu.Registers[inst.Rd] = int32(uint32(int16(b)))
 }
 
-func Sb(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Sb(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs2] & 0x000000FF)
 }
 
-func Sh(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Sh(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs2] & 0x000000FF)
 	mem[cpu.Registers[inst.Rs1]+1] = uint8((cpu.Registers[inst.Rs2] >> 8) & 0x000000FF )
 }
 
-func Sw(inst instruction.Instruction, cpu *cpu.Cpu, mem [65536]uint8) {
+func Sw(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	mem[cpu.Registers[inst.Rs1]] = uint8(cpu.Registers[inst.Rs2] & 0x000000FF)
 	mem[cpu.Registers[inst.Rs1]+1] = uint8((cpu.Registers[inst.Rs2]  >> 8) & 0x000000FF)
 	mem[cpu.Registers[inst.Rs1]+2] = uint8((cpu.Registers[inst.Rs2] >> 16) & 0x000000FF)

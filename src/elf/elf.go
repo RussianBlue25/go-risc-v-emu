@@ -35,7 +35,7 @@ type elf32Pheader struct {
     P_align     uint32
 }
 
-func ElfLoad(Memory [65536]uint8) [65536]uint8 {
+func ElfLoad(Memory [1024*1024]uint8) [1024*1024]uint8 {
 
     file, err := os.Open(os.Args[1])
 	if err != nil {
