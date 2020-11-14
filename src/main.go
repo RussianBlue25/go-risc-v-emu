@@ -238,5 +238,7 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 	case 111:
 		rv32i.Jal(inst, cpu)
 		fmt.Println("jal")
+	default:
+		fmt.Println("error")
 	}
 }
