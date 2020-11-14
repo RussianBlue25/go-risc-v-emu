@@ -21,13 +21,14 @@ func main() {
 	var code uint32
 
 	for {
+		fmt.Printf("%x\n", cpu.Pc)
 		code = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
+		cpu.Pc += 4
 		if cpu.Pc == 65536 {
 			continue
 		}
 		//fmt.Printf("%x\n", code)
 		inst = decode(code)
-		fmt.Printf("%x\n", cpu.Pc)
 		fmt.Printf("Rs1 is %x\n", inst.Rs1)
 		fmt.Printf("Rs2 is %x\n", inst.Rs2)
 		fmt.Printf("Rd is %x\n", inst.Rd)
@@ -40,7 +41,6 @@ func main() {
 		}
 
 		fmt.Println(cpu.Registers)
-		cpu.Pc += 4
 	}
 }
 
