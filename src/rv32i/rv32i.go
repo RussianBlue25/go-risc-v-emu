@@ -120,7 +120,8 @@ func Lui(inst instruction.Instruction, cpu *cpu.Cpu) {
 }
 
 func Auipc(inst instruction.Instruction, cpu *cpu.Cpu) {
-	cpu.Registers[inst.Rd] = cpu.Pc + inst.Imm
+	//pc was incremented before calling this instruction
+	cpu.Registers[inst.Rd] = cpu.Pc - 4 + inst.Imm
 }
 
 func Beq(inst instruction.Instruction, cpu *cpu.Cpu) {
