@@ -6,21 +6,23 @@ import (
 	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
 	"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
 	"github.com/RussianBlue25/go-risc-v-emu/src/elf"
+	"github.com/RussianBlue25/go-risc-v-emu/src/binary"
 )
 
 func main() {
 	var Memory [65536]uint8
 
-	Memory = elf.ElfLoad(Memory)
+	//Memory = elf.ElfLoad(Memory)
+	Memory = elf.BinLoad(Memory)
 
 	var inst instruction.Instruction
 	cpu := cpu.Cpu{}
 
 	var code uint32
 
-	for i := 0; i < 65536; i++{
+	for {
 		code = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
-		if code == 0x00000000 {
+		if cpu.Pc == 65536 {
 			continue
 		}
 		//fmt.Printf("%x\n", code)
