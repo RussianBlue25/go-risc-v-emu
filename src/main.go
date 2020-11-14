@@ -5,7 +5,7 @@ import (
 	"github.com/RussianBlue25/go-risc-v-emu/src/cpu"
 	"github.com/RussianBlue25/go-risc-v-emu/src/instruction"
 	"github.com/RussianBlue25/go-risc-v-emu/src/rv32i"
-	"github.com/RussianBlue25/go-risc-v-emu/src/elf"
+	//"github.com/RussianBlue25/go-risc-v-emu/src/elf"
 	"github.com/RussianBlue25/go-risc-v-emu/src/binary"
 )
 
@@ -13,7 +13,7 @@ func main() {
 	var Memory [65536]uint8
 
 	//Memory = elf.ElfLoad(Memory)
-	Memory = elf.BinLoad(Memory)
+	Memory = bin.BinLoad(Memory)
 
 	var inst instruction.Instruction
 	cpu := cpu.Cpu{}

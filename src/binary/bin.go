@@ -1,5 +1,11 @@
 package bin
 
+import (
+    "os"
+    "fmt"
+    "io/ioutil"
+)
+
 func BinLoad(Memory [65536]uint8) [65536]uint8 {
     file, err := os.Open(os.Args[1])
 	if err != nil {
