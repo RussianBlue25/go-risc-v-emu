@@ -21,11 +21,11 @@ func main() {
 	var code uint32
 
 	for {
-		if cpu.Pc > 1024*1024 {
-			break
-		}
 		fmt.Printf("%x\n", cpu.Pc)
 		code = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
+		if inst == 0x0000 {
+			break
+		}
 		cpu.Pc += 4
 		//fmt.Printf("%x\n", code)
 		inst = decode(code)
@@ -232,11 +232,11 @@ func execute(inst instruction.Instruction, cpu *cpu.Cpu, mem [1024*1024]uint8) {
 			rv32i.Bgeu(inst, cpu)
 			fmt.Println("bgeu")
 		}
+	case 103:
+		rv32i.Jalr(inst, cpu)
+		fmt.Println("jalr")
 	case 111:
 		rv32i.Jal(inst, cpu)
 		fmt.Println("jal")
-	case 115:
-		rv32i.Jalr(inst, cpu)
-		fmt.Println("jalr")
 	}
 }
