@@ -25,7 +25,7 @@ func main() {
 		code = uint32(Memory[cpu.Pc]) | uint32(Memory[cpu.Pc+1])<<8 | uint32(Memory[cpu.Pc+2])<<16 | uint32(Memory[cpu.Pc+3])<<24
 		cpu.Pc += 4
 		if cpu.Pc == 65536 {
-			continue
+			break
 		}
 		//fmt.Printf("%x\n", code)
 		inst = decode(code)
